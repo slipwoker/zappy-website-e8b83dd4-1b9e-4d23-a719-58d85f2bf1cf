@@ -1,0 +1,59 @@
+# Business — Generative Engine Optimization Map
+
+---
+
+## Pages
+
+### בית
+https://example.com
+תרומה למרכז שיקום נפגעי טראומה שמשנה חיים. המשכן מעניק טיפול מקצועי לנפגעי טראומה ומחזיר תקווה. הצטרפו למעגל התורמים שלנו היום.
+
+### אודות
+https://example.com/about
+גלו את הסיפור מאחורי המשכן, המרכז המוביל בישראל לשיקום נפגעי טראומה. למדו על הצוות המקצועי, השיטות החדשניות והערכים שמנחים אותנו בדרך.
+
+### השפעה
+https://example.com/impact
+כל תרומה מציעה תקווה חדשה. גלו כיצד תרומתכם למרכז שיקום נפגעי טראומה משנה חיים, עם סיפורי הצלחה מרגשים ונתונים מוכחים על השפעה חברתית אמיתית.
+
+### צור קשר
+https://example.com/contact
+רוצים להשפיע? צרו קשר עם המשכן לגיוס תרומות למיזמים חברתיים בישראל. הצטרפו לקהילת התורמים והמשקיעים שמאמינים בשיקום נפגעי טראומה.
+
+### Products
+https://example.com/products
+המוצרים שלנו - המשכן | המרכז לשיקום נפגעי טראומה
+
+### Product Detail
+https://example.com/product/:slug
+פרטי המוצר - המשכן | המרכז לשיקום נפגעי טראומה
+
+### Category
+https://example.com/category/:slug
+מוצרים - המשכן | המרכז לשיקום נפגעי טראומה
+
+## Legal & Policy
+
+### Privacy Policy
+https://example.com/privacy
+Information about how user data is collected, stored, and protected.
+
+### Terms & Conditions
+https://example.com/terms
+Legal terms describing service usage, rights, and policies.
+
+### Accessibility Statement
+https://example.com/accessibility
+Information about WCAG compliance and accessibility features.
+
+---
+
+# Business Context (for LLM understanding)
+
+## About Business
+---
+
+# Additional Resources
+
+- **Sitemap**: https://example.com/sitemap.xml
+- **Robots.txt**: https://example.com/robots.txt

@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>ראו את ההשפעה של תרומתכם — המשכן | המרכז לשיקום נפגעי טראומה</title>
+    <meta name="description" content="כל תרומה מציעה תקווה חדשה. גלו כיצד תרומתכם למרכז שיקום נפגעי טראומה משנה חיים, עם סיפורי הצלחה מרגשים ונתונים מוכחים על השפעה חברתית אמיתית.">
+    <meta name="keywords" content="השפעה חברתית טראומה, תרומה למרכז שיקום נפגעי טראומה, גיוס תרומות למיזמים חברתיים בישראל, סיפורי הצלחה שיקום טראומה, תוצאות טיפול בטראומה">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Zappy Analytics -->
+<script>
+(function() {
+  'use strict';
+  
+  // Configuration
+  var config = {
+    websiteId: 'e8b83dd4-1b9e-4d23-a719-58d85f2bf1cf',
+    apiUrl: 'https://api.zappy5.com/api/analytics/track',
+    sessionDuration: 30 * 60 * 1000, // 30 minutes
+    visitorDuration: 30 * 24 * 60 * 60 * 1000, // 30 days
+    trackPageViews: true,
+    trackClicks: true,
+    trackFormSubmissions: true
+  };
+  
+  // Generate or retrieve persistent visitor ID (30 days)
+  function getVisitorId() {
+    var visitorKey = 'zappy_visitor_' + config.websiteId;
+    var visitor = null;
+    
+    try {
+      visitor = localStorage.getItem(visitorKey);
+      if (visitor) {
+        var visitorData = JSON.parse(visitor);
+        var now = Date.now();
+        
+        // Check if visitor ID is still valid (30 days)
+        if (now - visitorData.created < config.visitorDuration) {
+          // Update last seen timestamp
+          visitorData.lastSeen = now;
+          localStorage.setItem(visitorKey, JSON.stringify(visitorData));
+          return visitorData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: LocalStorage not available');
+    }
+    
+    // Generate new visitor ID
+    var newVisitorId = 'zv_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      localStorage.setItem(visitorKey, JSON.stringify({
+        id: newVisitorId,
+        created: Date.now(),
+        lastSeen: Date.now()
+      }));
+    } catch (e) {
+      // Continue without local storage
+    }
+    
+    return newVisitorId;
+  }
+  
+  // Generate or retrieve session ID (30 minutes)
+  function getSessionId() {
+    var sessionKey = 'zappy_session_' + config.websiteId;
+    var session = null;
+    
+    try {
+      session = sessionStorage.getItem(sessionKey);
+      if (session) {
+        var sessionData = JSON.parse(session);
+        var now = Date.now();
+        
+        // Check if session is still valid
+        if (now - sessionData.timestamp < config.sessionDuration) {
+          // Update timestamp
+          sessionData.timestamp = now;
+          sessionStorage.setItem(sessionKey, JSON.stringify(sessionData));
+          return sessionData.id;
+        }
+      }
+    } catch (e) {
+      console.warn('Zappy Analytics: SessionStorage not available');
+    }
+    
+    // Generate new session ID
+    var newSessionId = 'zs_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    
+    try {
+      sessionStorage.setItem(sessionKey, JSON.stringify({
+        id: newSessionId,
+        timestamp: Date.now()
+      }));
+    } catch (e) {
+      // Continue without session storage
+    }
+    
+    return newSessionId;
+  }
+  
+  var visitorId = getVisitorId();
+  var sessionId = getSessionId();
+  
+  // Track an event
+  function trackEvent(eventType, data) {
+    data = data || {};
+    
+    var eventData = {
+      website_id: config.websiteId,
+      event_type: eventType,
+      page_path: window.location.pathname,
+      referrer: document.referrer || 'direct',
+      visitor_id: visitorId,
+      session_id: sessionId,
+      metadata: data
+    };
+    
+    // Use sendBeacon if available (better for page unload events)
+    if (navigator.sendBeacon) {
+      var blob = new Blob([JSON.stringify(eventData)], { type: 'application/json' });
+      navigator.sendBeacon(config.apiUrl, blob);
+    } else {
+      // Fallback to fetch
+      fetch(config.apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(eventData),
+        keepalive: true
+      }).catch(function(error) {
+        console.warn('Zappy Analytics: Failed to track event', error);
+      });
+    }
+  }
+  
+  // Track page view
+  if (config.trackPageViews) {
+    trackEvent('pageview', {
+      title: document.title,
+      url: window.location.href
+    });
+  }
+  
+  // Track clicks on important elements
+  if (config.trackClicks) {
+    document.addEventListener('click', function(e) {
+      var target = e.target;
+      
+      // Track button clicks (counted as actions)
+      if (target.tagName === 'BUTTON' || target.closest('button')) {
+        var button = target.tagName === 'BUTTON' ? target : target.closest('button');
+        trackEvent('click', {
+          element: 'button',
+          text: button.textContent.trim().substring(0, 100),
+          id: button.id || null,
+          class: button.className || null
+        });
+      }
+      
+      // Track link clicks (navigation - not counted as actions)
+      else if (target.tagName === 'A' || target.closest('a')) {
+        var link = target.tagName === 'A' ? target : target.closest('a');
+        trackEvent('navigation', {
+          element: 'link',
+          text: link.textContent.trim().substring(0, 100),
+          href: link.href,
+          external: link.hostname !== window.location.hostname
+        });
+      }
+    }, true);
+  }
+  
+  // Track form submissions
+  if (config.trackFormSubmissions) {
+    document.addEventListener('submit', function(e) {
+      var form = e.target;
+      
+      trackEvent('form_submit', {
+        form_id: form.id || null,
+        form_name: form.name || null,
+        form_action: form.action || null,
+        form_method: form.method || 'GET'
+      });
+    }, true);
+  }
+  
+  // Track time on page (send on page unload)
+  var pageLoadTime = Date.now();
+  
+  window.addEventListener('beforeunload', function() {
+    var timeOnPage = Math.floor((Date.now() - pageLoadTime) / 1000); // in seconds
+    
+    trackEvent('page_unload', {
+      time_on_page: timeOnPage,
+      page_path: window.location.pathname
+    });
+  });
+  
+  // Expose tracking function globally for custom events
+  window.zappyAnalytics = {
+    track: trackEvent,
+    getVisitorId: function() { return visitorId; },
+    getSessionId: function() { return sessionId; }
+  };
+  
+})();
+</script>
+<!-- End Zappy Analytics -->
+    <meta property="og:title" content="ראו את ההשפעה של תרומתכם — המשכן | המרכז לשיקום נפגעי טראומה">
+  <meta property="og:description" content="כל תרומה מציעה תקווה חדשה. גלו כיצד תרומתכם למרכז שיקום נפגעי טראומה משנה חיים, עם סיפורי הצלחה מרגשים ונתונים מוכחים על השפעה חברתית אמיתית.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="he_IL">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ראו את ההשפעה של תרומתכם — המשכן | המרכז לשיקום נפגעי טראומה">
+  <meta name="twitter:description" content="כל תרומה מציעה תקווה חדשה. גלו כיצד תרומתכם למרכז שיקום נפגעי טראומה משנה חיים, עם סיפורי הצלחה מרגשים ונתונים מוכחים על השפעה חברתית אמיתית.">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/assets/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon-512x512.png">
+    <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+    <!-- Cookie Consent -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.css" />
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-cookieconsent@3/dist/cookieconsent.umd.js"></script>
+    <!-- Mickidum Accessibility Toolbar -->
+    <script src="https://cdn.jsdelivr.net/gh/mickidum/acc_toolbar/acctoolbar/acctoolbar.min.js"></script>
+    <link rel="stylesheet" href="/styles.css">
+
+    <style id="zappy-dropdown-submenu-styles">
+      /* ========== DESKTOP DROPDOWN SUBMENU STYLES ========== */
+      /* Base styles for dropdown submenus - parent must be positioned */
+      .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { position: relative; }
+      /* Submenu base - hidden by default */
+      .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { display: block !important; position: absolute !important; top: 100%; left: 0; min-width: 220px; background: white; border-radius: 8px; box-shadow: 0 8px 25px rgba(0,0,0,0.15); padding: 8px 0; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s ease; z-index: 1000; list-style: none; pointer-events: none; }
+      /* CRITICAL: Desktop hover styles to show dropdown */
+      .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Submenu item styling */
+      .sub-menu li { list-style: none; margin: 0; padding: 0; }
+      .sub-menu a { display: block !important; padding: 10px 16px !important; color: #333 !important; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background-color 0.2s; }
+      .sub-menu a:hover { background-color: #f5f5f5; }
+      /* RTL (Hebrew/Arabic) dropdown positioning */
+      [dir="rtl"] .nav-menu .sub-menu, [dir="rtl"] nav .sub-menu, [dir="rtl"] .navbar .sub-menu, html[lang="he"] .nav-menu .sub-menu, html[lang="he"] nav .sub-menu, html[lang="he"] .navbar .sub-menu, html[lang="ar"] .nav-menu .sub-menu, html[lang="ar"] nav .sub-menu, html[lang="ar"] .navbar .sub-menu { left: auto !important; right: 0 !important; }
+      /* Hide empty dropdown menus */
+      .sub-menu:empty, .sub-menu:not(:has(li:not(.zappy-hidden-menu-item))), .sub-menu:not(:has(li)) { display: none !important; opacity: 0 !important; visibility: hidden !important; pointer-events: none !important; }
+      /* Desktop: show submenu on Menu Group hover */
+      li:has(.menu-group-title):hover > .sub-menu { opacity: 1 !important; visibility: visible !important; transform: translateY(0) !important; pointer-events: auto !important; }
+      /* Menu Group title styling */
+      .nav-menu > li > .menu-group-title, #navMenu > li > .menu-group-title { display: inline-block; padding: 0.5rem 1rem; cursor: default; user-select: none; }
+      
+      /* ========== MOBILE SUBMENU STYLES ========== */
+      @media (max-width: 768px) {
+        .nav-menu .sub-menu, nav .sub-menu, .navbar .sub-menu, #navMenu .sub-menu { position: static !important; transform: none !important; box-shadow: none !important; background: transparent !important; max-height: 0; overflow: hidden; opacity: 0; visibility: hidden; transition: max-height 0.3s ease, opacity 0.3s ease; padding: 0 !important; border-radius: 0 !important; }
+        .sub-menu.mobile-expanded { max-height: 500px !important; opacity: 1 !important; visibility: visible !important; padding: 8px 0 8px 16px !important; }
+        [dir="rtl"] .sub-menu.mobile-expanded, html[lang="he"] .sub-menu.mobile-expanded { padding: 8px 16px 8px 0 !important; }
+        /* Disable hover behavior on mobile */
+        .nav-menu li:hover > .sub-menu, nav li:hover > .sub-menu, .navbar li:hover > .sub-menu, #navMenu li:hover > .sub-menu { opacity: 0; visibility: hidden; pointer-events: none; }
+        .nav-menu li > .sub-menu.mobile-expanded, nav li > .sub-menu.mobile-expanded, .navbar li > .sub-menu.mobile-expanded, #navMenu li > .sub-menu.mobile-expanded { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+        .nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu) { display: flex !important; flex-wrap: wrap !important; align-items: center !important; }
+        .nav-menu li:has(.sub-menu) > a, nav li:has(.sub-menu) > a, .navbar li:has(.sub-menu) > a, #navMenu li:has(.sub-menu) > a { flex: 1 !important; }
+        .nav-menu li:has(.sub-menu) > a [class*="chevron"], .nav-menu li:has(.sub-menu) > a [class*="arrow"], .nav-menu li:has(.sub-menu) > a .fa-chevron-down, .nav-menu li:has(.sub-menu) > a .fa-angle-down, nav li:has(.sub-menu) > a [class*="chevron"], nav li:has(.sub-menu) > a [class*="arrow"], #navMenu li:has(.sub-menu) > a [class*="chevron"], #navMenu li:has(.sub-menu) > a [class*="arrow"] { display: none !important; visibility: hidden !important; }
+        .mobile-submenu-toggle { display: flex !important; align-items: center !important; justify-content: center !important; width: 44px !important; height: 44px !important; background: transparent !important; border: none !important; cursor: pointer !important; }
+        .mobile-submenu-toggle::after { content: '' !important; width: 0 !important; height: 0 !important; border-left: 6px solid transparent !important; border-right: 6px solid transparent !important; border-top: 7px solid currentColor !important; transition: transform 0.3s ease !important; }
+        .mobile-submenu-toggle.expanded::after { transform: rotate(180deg) !important; }
+        .nav-menu li:has(.sub-menu) > .sub-menu, nav li:has(.sub-menu) > .sub-menu { flex-basis: 100% !important; width: 100% !important; }
+        .sub-menu a { padding: 10px 0 !important; display: block !important; }
+        .nav-menu li:has(.sub-menu) > .menu-group-title, nav li:has(.sub-menu) > .menu-group-title, .navbar li:has(.sub-menu) > .menu-group-title, #navMenu li:has(.sub-menu) > .menu-group-title { flex: 1 !important; }
+      }
+      @media (min-width: 769px) { .mobile-submenu-toggle { display: none !important; } }
+    </style>
+
+    <style id="zappy-widget-visibility">
+      #mic-access-tool-general-button, .mic-access-tool-general-button,
+      #mic-init-access-tool .mic-access-tool-general-button, #mic-init-access-tool #mic-access-tool-general-button,
+      ._access-icon, #mic-access-tool-box, .mic-access-tool-box,
+      #mic-init-access-tool #mic-access-tool-box, div[id*="mic-access-tool-box"], ._access-menu {
+        display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important;
+      }
+    </style>
+</head>
+<body>
+
+
+    <div class="mobile-search-panel" id="mobile-search-panel">
+      <div class="search-wrapper">
+        <input type="text" id="mobile-search-input" placeholder="חיפוש מוצרים..." autocomplete="off">
+        <button class="search-submit" id="mobile-search-submit" title="חיפוש">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        </button>
+        <button class="close-search" id="close-mobile-search">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="search-results" id="mobile-search-results"></div>
+    </div>
+  
+<script>window.ZAPPY_WEBSITE_ID = "e8b83dd4-1b9e-4d23-a719-58d85f2bf1cf";window.ZAPPY_API_BASE = (window.location.pathname.includes('/preview') ? "https://api.zappy5.com" : "https://api.zappy5.com");</script>
+  <nav class="navbar" dir="rtl">
+  <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+    <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+    <svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" style="display:none;">
+      <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+    </svg>
+  </button>
+  
+  <button class="phone-header-btn" aria-label="Call">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+    </svg>
+  </button>
+  
+  <div class="nav-container">
+    <div class="nav-brand">
+      <a href="/" class="logo-link">
+        <img src="/assets/logo.webp" alt="המשכן | המרכז לשיקום נפגעי טראומה" class="logo" />
+      </a>
+    </div>
+    
+    <ul class="nav-menu" id="navMenu">
+
+    <li class="menu-item-has-children zappy-products-dropdown">
+      <a href="/products">
+        מוצרים
+        <svg class="dropdown-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 9l6 6 6-6"></path>
+        </svg>
+      </a>
+      <ul class="sub-menu" id="zappy-nav-category-links">
+        <li><a href="/products">כל המוצרים</a></li>
+        <!-- Categories will be loaded dynamically -->
+      </ul>
+    </li>
+  <li><a href="/about">אודות</a></li><li><a href="/impact">השפעה</a></li><li><a href="/contact">צור קשר</a></li></ul><div class="nav-ecommerce-icons nav-icons-left"><div class="nav-search-box">
+    <input type="text" class="nav-search-input" id="nav-search-input" placeholder="חיפוש מוצרים..." autocomplete="off">
+    <button class="nav-search-btn" id="nav-search-btn" title="חיפוש">
+      <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    </button>
+    <div class="nav-search-results" id="nav-search-results"></div>
+  </div></div><div class="nav-ecommerce-icons nav-icons-right"><button class="nav-search-toggle" id="mobile-search-toggle" title="חיפוש"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg></button></div>
+    
+    
+  </div>
+</nav>
+
+    <nav class="zappy-catalog-menu rtl" id="zappy-catalog-menu" dir="rtl">
+      <div class="catalog-menu-container">
+        <a href="/products" class="catalog-menu-item catalog-menu-all">כל המוצרים</a>
+        <div class="catalog-menu-categories" id="zappy-category-links">
+          <!-- Categories will be loaded dynamically -->
+        </div>
+      </div>
+    </nav>
+  
+  
+  <main>
+    <section class="impact-page-intro-section" data-layout-spec="השפעה-page-intro">
+  <div class="impact-intro-container">
+    <div class="impact-intro-content">
+      <h1>דיווח השפעה שניתן לביקורת.</h1>
+      <p>אנחנו מאמינים בשקיפות מוחלטת. כל תרומה למרכז שיקום נפגעי טראומה מתורגמת לתוצאות מדידות, עם מתודולוגיה ברורה ושיפור מתמיד. אתם לא רק תורמים – אתם משקיעים בשינוי אמיתי.</p>
+      
+      <div class="impact-metrics-strip">
+        <div class="impact-metric-item">
+          <div class="metric-number">2,847</div>
+          <div class="metric-label">אנשים הושפעו</div>
+        </div>
+        <div class="impact-metric-item">
+          <div class="metric-number">94%</div>
+          <div class="metric-label">השלמת תוכנית</div>
+        </div>
+        <div class="impact-metric-item">
+          <div class="metric-number">12</div>
+          <div class="metric-label">יזמות פעילות</div>
+        </div>
+      </div>
+      
+      <a href="/contact" class="btn-primary impact-cta">בקשו פרטי השפעה מלאים</a>
+    </div>
+  </div>
+  
+  <div class="impact-intro-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,60 L0,45 L400,45 L400,30 L800,30 L800,15 L1200,15 L1200,60 Z" fill="var(--bg-light)"></path>
+    </svg>
+  </div>
+</section>
+
+<section class="impact-programs-section" data-layout-spec="השפעה-programs">
+  <div class="impact-programs-container">
+    <div class="impact-programs-header">
+      <h2>תוכניות הממומנות על פי יעדים מדידים</h2>
+      <p>אנו משקיעים במסלולי שיקום ותמיכה שמתמקדים בתוצאות מדידות ובשינוי אמיתי עבור נפגעי טראומה.</p>
+    </div>
+
+    <div class="impact-programs-grid">
+      <article class="impact-program-card">
+        <div class="impact-program-image-wrapper">
+          <img data-placeholder="impact-programs-image-1" data-context="Professional therapeutic rehabilitation session for trauma survivors in Israel - calm, supportive environment with therapist and patient, modern clinical setting, warm natural lighting, hope and recovery atmosphere" width="600" height="240" src="/assets/site-impact-programs-image-1.webp" alt="שיקום וטיפול מקצועי לנפגעי טראומה">
+        </div>
+        <div class="impact-program-content">
+          <h3>שיקום וטיפול מקצועי</h3>
+          <p>מסלולי טיפול אינטנסיביים המשלבים טיפול פסיכולוגי, תמיכה קהילתית ומעקב אישי. <strong>יעד:</strong> 85% מהמשתתפים מדווחים על שיפור משמעותי בתפקוד היומיומי תוך 12 חודשים.</p>
+        </div>
+      </article>
+
+      <article class="impact-program-card">
+        <div class="impact-program-image-wrapper">
+          <img data-placeholder="impact-programs-image-2" data-context="Community support group for trauma recovery in Israel - diverse group of people in circle formation, supportive gestures, community center environment, warm inclusive atmosphere, resilience and connection" width="600" height="240" src="/assets/site-impact-programs-image-2.webp" alt="חוסן קהילתי וקבוצות תמיכה">
+        </div>
+        <div class="impact-program-content">
+          <h3>חוסן קהילתי</h3>
+          <p>קבוצות תמיכה וסדנאות העצמה המחזקות רשתות חברתיות ויוצרות מרחב בטוח לשיתוף והחלמה משותפת. <strong>יעד:</strong> 90% מהמשתתפים מפתחים רשת תמיכה פעילה ומדווחים על תחושת שייכות.</p>
+        </div>
+      </article>
+
+      <article class="impact-program-card">
+        <div class="impact-program-image-wrapper">
+          <img data-placeholder="impact-programs-image-3" data-context="Emergency trauma response team in Israel - professional crisis intervention, immediate support services, emergency response setting, urgent care atmosphere, professional medical and psychological support" width="600" height="240" src="/assets/site-impact-programs-image-3.webp" alt="תמיכה חירום ומענה מיידי">
+        </div>
+        <div class="impact-program-content">
+          <h3>תמיכה חירום</h3>
+          <p>מענה מיידי לנפגעי טראומה חריפה - צוותים מקצועיים זמינים 24/7 למתן סיוע ראשוני, ליווי והפניה לטיפול מתאים. <strong>יעד:</strong> מענה תוך 2 שעות ממועד הפנייה, 100% מהמטופלים מקבלים תוכנית התערבות אישית.</p>
+        </div>
+      </article>
+    </div>
+
+    <div class="impact-programs-stewardship">
+      <p>כל תרומה עוברת מעקב שקוף מרגע ההעברה ועד למימוש התוכנית. אנו מפרסמים דוחות רבעוניים המפרטים את השימוש בכספים, את היעדים שהושגו ואת ההשפעה המדידה על חיי המטופלים. האמון שלכם מחייב אותנו לניהול אחראי ושקיפות מלאה.</p>
+    </div>
+  </div>
+
+  <div class="impact-programs-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,60 L0,30 L900,30 Q950,28 1000,32 T1100,28 L1200,30 L1200,60 Z" fill="var(--bg-dark)"></path>
+    </svg>
+  </div>
+</section>
+
+<section class="impact-transparency-section" data-layout-spec="השפעה-transparency">
+  <div class="impact-transparency-container">
+    <div class="impact-transparency-header">
+      <h2>שקיפות כברירת מחדל</h2>
+      <p>אנחנו מאמינים שכל תורם זכאי לדעת בדיוק לאן הולכת תרומתו ומה ההשפעה האמיתית שלה. לכן אנחנו מפרסמים באופן שוטף את כל הנתונים המהותיים על פעילותנו.</p>
+    </div>
+
+    <div class="impact-transparency-table">
+      <div class="impact-transparency-row">
+        <div class="impact-transparency-cell">
+          <div class="impact-transparency-icon">
+            <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 2L12.5 7.5L18 8.5L14 12.5L15 18L10 15.5L5 18L6 12.5L2 8.5L7.5 7.5L10 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <h3>דוחות כספיים מבוקרים</h3>
+          <p>ביקורת חשבונאית שנתית מלאה על ידי רואי חשבון חיצוניים, כולל פירוט מלא של הכנסות והוצאות לפי תוכניות וקטגוריות.</p>
+        </div>
+        <div class="impact-transparency-cell">
+          <h3>למה זה חשוב</h3>
+          <p>תורמים יכולים לבחון את היעילות התפעולית שלנו ולוודא שכל שקל מושקע בצורה אחראית ומקצועית במטרות הארגון.</p>
+        </div>
+      </div>
+
+      <div class="impact-transparency-row">
+        <div class="impact-transparency-cell">
+          <div class="impact-transparency-icon">
+            <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 10L8 15L17 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"></circle>
+            </svg>
+          </div>
+          <h3>עדכוני תוכניות ופרויקטים</h3>
+          <p>דיווח רבעוני מפורט על התקדמות כל תוכנית ופרויקט, כולל אבני דרך שהושגו, אתגרים שעלו והצעדים הבאים המתוכננים.</p>
+        </div>
+        <div class="impact-transparency-cell">
+          <h3>למה זה חשוב</h3>
+          <p>שקיפות מלאה על מהלך הפעילות מאפשרת לתורמים להבין את המסע לקראת השגת המטרות ולהרגיש שותפים אמיתיים להצלחה.</p>
+        </div>
+      </div>
+
+      <div class="impact-transparency-row">
+        <div class="impact-transparency-cell">
+          <div class="impact-transparency-icon">
+            <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 2C10 2 6 4 6 8C6 10 7 12 10 14C13 12 14 10 14 8C14 4 10 2 10 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M10 14V18M7 18H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+          <h3>גישת הגנה ובטיחות</h3>
+          <p>פרסום מדיניות ההגנה על מטופלים, נהלי בטיחות, הכשרות צוות וגורמי פיקוח חיצוניים המבטיחים סביבה בטוחה ותומכת.</p>
+        </div>
+        <div class="impact-transparency-cell">
+          <h3>למה זה חשוב</h3>
+          <p>אמון הוא הבסיס לכל עבודה טיפולית. תורמים רוצים לדעת שהארגון פועל לפי הסטנדרטים הגבוהים ביותר בכל הנוגע לרווחת המטופלים.</p>
+        </div>
+      </div>
+
+      <div class="impact-transparency-row">
+        <div class="impact-transparency-cell">
+          <div class="impact-transparency-icon">
+            <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="7" cy="10" r="2" stroke="currentColor" stroke-width="1.5"></circle>
+              <circle cx="13" cy="10" r="2" stroke="currentColor" stroke-width="1.5"></circle>
+              <path d="M9 10H11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+              <rect x="3" y="5" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.5"></rect>
+            </svg>
+          </div>
+          <h3>אימות שותפים ומקורות מימון</h3>
+          <p>רשימה מלאה של כל השותפים הפילנתרופיים, גופי המימון הממשלתיים והפרטיים, כולל היקף המימון וקריטריוני השותפות.</p>
+        </div>
+        <div class="impact-transparency-cell">
+          <h3>למה זה חשוב</h3>
+          <p>תורמים רוצים לדעת מי עוד תומך בארגון ואיך מבוזרים מקורות המימון, כדי להבין את היציבות הפיננסית והאמינות של הארגון.</p>
+        </div>
+      </div>
+
+      <div class="impact-transparency-row">
+        <div class="impact-transparency-cell">
+          <div class="impact-transparency-icon">
+            <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M4 10L7 13L16 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              <path d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+            </svg>
+          </div>
+          <h3>מדדי תוצאות והשפעה</h3>
+          <p>נתונים מדידים על תוצאות הטיפולים, שיפור איכות החיים של מטופלים, שיעורי שיקום מוצלחים ומעקב ארוך טווח אחרי השלמת הטיפול.</p>
+        </div>
+        <div class="impact-transparency-cell">
+          <h3>למה זה חשוב</h3>
+          <p>תורמים רוצים לראות השפעה אמיתית ומדידה. מדדים אובייקטיביים מאפשרים להעריך את האפקטיביות של הטיפולים ולהשוות לסטנדרטים בתחום.</p>
+        </div>
+      </div>
+
+      <div class="impact-transparency-row">
+        <div class="impact-transparency-cell">
+          <div class="impact-transparency-icon">
+            <svg data-element-type="icon" data-icon-type="svg" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"></rect>
+              <path d="M3 8H17M8 3V17" stroke="currentColor" stroke-width="1.5"></path>
+            </svg>
+          </div>
+          <h3>מבנה ממשל ארגוני</h3>
+          <p>הרכב הנהלה, ועד מנהל, ועדות משנה, כללי אתיקה מקצועית ונהלי ניגוד עניינים. כולל פרוטוקולים של ישיבות ועד מנהל (בכפוף לסודיות).</p>
+        </div>
+        <div class="impact-transparency-cell">
+          <h3>למה זה חשוב</h3>
+          <p>ממשל תקין ושקוף מבטיח קבלת החלטות מושכלת, מניעת ניגודי עניינים ושמירה על אינטרסים של המטופלים והתורמים כאחד.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="impact-transparency-footer">
+      <h3>שאלו אותנו הכל</h3>
+      <p>יש לכם שאלה על הנתונים? רוצים הבהרה נוספת? אנחנו זמינים לכל פנייה ומחויבים לספק מידע מלא ומדויק. פנו אלינו בכל דרך נוחה לכם.</p>
+    </div>
+  </div>
+
+  <div class="impact-transparency-divider-wrapper">
+    <svg data-no-icon-edit="true" aria-hidden="true" viewBox="0 0 1200 100" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="transparency-glow" cx="50%" cy="0%" r="60%">
+          <stop offset="0%" stop-color="rgba(0,200,255,0.25)"></stop>
+          <stop offset="50%" stop-color="rgba(0,200,255,0.08)"></stop>
+          <stop offset="100%" stop-color="rgba(0,200,255,0)"></stop>
+        </radialGradient>
+      </defs>
+      <ellipse cx="600" cy="0" rx="600" ry="100" fill="url(#transparency-glow)" opacity="0.6"></ellipse>
+    </svg>
+  </div>
+</section>
+
+<section class="-success-stories-section" data-layout-spec="השפעה-success-stories">
+  <div class="success-stories-container">
+    <div class="success-stories-intro">
+      <h2>תוצאות בשטח</h2>
+      <p>אנחנו מאמינים בסיפור שמכבד את האדם ומתעד שינוי אמיתי. כל מסע שיקום הוא ייחודי, וכל הצלחה נמדדת בהחזרת כוח אישי, גישה למשאבים והמשך טיפול. אנחנו מתחייבים להגנה מוחלטת על פרטיות ולשיתוף תוצאות מדידות בלבד.</p>
+    </div>
+
+    <div class="success-stories-grid">
+      <article class="story-card">
+        <div class="story-image-wrapper">
+          <img data-placeholder="-success-stories-image-1" data-context="Monochrome desaturated photo with film grain texture showing a supportive hand gently placed on a shoulder in a counseling or therapy setting, conveying human connection and emotional support for trauma recovery, professional philanthropic aesthetic" width="600" height="400" src="/assets/site-success-stories-image-1.webp" alt="תמיכה אנושית בתהליך שיקום">
+        </div>
+        <div class="story-content">
+          <h3>השלמת תכנית שיקום מלאה</h3>
+          <p>משתתף בתכנית השיקום השלים 12 חודשי טיפול רצוף, כולל 48 מפגשי טיפול אישיים ו-24 מפגשי קבוצה. <strong class="outcome-highlight">100% נוכחות במפגשים, המשך מעקב למשך שנה נוספת.</strong></p>
+        </div>
+      </article>
+
+      <article class="story-card">
+        <div class="story-image-wrapper">
+          <img data-placeholder="-success-stories-image-2" data-context="Monochrome desaturated image with subtle grain showing a person writing in a journal or notebook in a calm therapeutic environment, symbolizing personal growth and self-reflection in trauma recovery, dignified and professional tone" width="600" height="400" src="/assets/site-success-stories-image-2.webp" alt="תיעוד אישי ותהליך צמיחה">
+        </div>
+        <div class="story-content">
+          <h3>גישה למשאבים קהילתיים</h3>
+          <p>במהלך השנה האחרונה, חיברנו 47 משתתפים למשאבים קהילתיים חיוניים: ייעוץ משפטי, תמיכה כלכלית וליווי תעסוקתי. <strong class="outcome-highlight">87% מהמשתתפים המשיכו בתכניות תמיכה חיצוניות לאחר סיום הטיפול.</strong></p>
+        </div>
+      </article>
+
+      <article class="story-card">
+        <div class="story-image-wrapper">
+          <img data-placeholder="-success-stories-image-3" data-context="Monochrome desaturated photo with film grain showing hands working together on a collaborative activity or art therapy project, representing community healing and group support in trauma recovery, respectful and empowering visual" width="600" height="400" src="/assets/site-success-stories-image-3.webp" alt="עבודה קבוצתית ותמיכה קהילתית">
+        </div>
+        <div class="story-content">
+          <h3>החזרת כוח אישי ועצמאות</h3>
+          <p>תכניות השיקום שלנו מתמקדות בהחזרת תחושת השליטה והעצמאות. משתתפים מדווחים על שיפור משמעותי ביכולת לקבל החלטות, לתכנן עתיד ולבנות קשרים בריאים. <strong class="outcome-highlight">תרומה למרכז שיקום נפגעי טראומה מאפשרת המשך תכניות אלו לטווח ארוך.</strong></p>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+  </main>
+  
+  <footer class="site-footer"><div class="footer-container"><div class="footer-grid"><div class="footer-column footer-about"><img src="/assets/logo.webp" alt="המשכן | המרכז לשיקום נפגעי טראומה" class="logo" /><p class="footer-description">המרכז לשיקום נפגעי טראומה מחויב לסייע ולשקם אנשים שעברו חוויות טראומטיות, ולהעניק להם תקווה ועתיד טוב יותר.</p></div><div class="footer-column footer-links"><h3 class="footer-title">קישורים מהירים</h3><ul class="footer-nav"><li><a href="/about">אודות</a></li><li><a href="/impact">השפעה</a></li><li><a href="/contact">צור קשר</a></li></ul></div><div class="footer-column footer-contact"><h3 class="footer-title">יצירת קשר</h3><ul class="contact-list"><li><i class="fas fa-envelope"></i><a href="mailto:[business_email]">[business_email]</a></li><li><i class="fas fa-phone"></i><a href="tel:[business_phone]">[business_phone]</a></li><li><a href="/"><i class="fas fa-map-marker-alt"></i><span>[business_address]</span></a></li></ul></div><div class="footer-column footer-social"><h3 class="footer-title">עקבו אחרינו</h3><div class="social-links"><a href="[facebook_handle]" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a><a href="[instagram_handle]" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="[whatsapp_handle]" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a></div></div></div><div class="footer-bottom"><div class="footer-legal"><a href="/privacy">Privacy Policy</a><span class="separator">|</span><a href="/terms">Terms &amp; Conditions</a><span class="separator">|</span>
+            <a href="/return-policy" aria-label="מדיניות החזרות">
+              מדיניות החזרות
+            </a><span class="separator">|</span><a href="/accessibility">Accessibility</a></div><div class="footer-copyright"><p>© 2026 המשכן | המרכז לשיקום נפגעי טראומה. All rights reserved.</p><a href="https://zappy5.com" target="_blank" class="zappy-attribution">Generated by Zappy</a></div></div></div></footer>
+  
+  <a href="https://wa.me/[whatsapp_handle]" class="whatsapp-float" aria-label="WhatsApp">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+  
+  <div data-integration="accessibility:toolbar"></div>
+
+    <script src="/script.js"></script>
+
+    <script id="zappy-mobile-submenu-script">
+    (function() {
+      function initMobileSubmenuToggles() {
+        if (window.innerWidth > 768) {
+          document.querySelectorAll('.mobile-submenu-toggle').forEach(function(btn) { btn.remove(); });
+          document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) { menu.classList.remove('mobile-expanded'); });
+          return;
+        }
+        var items = document.querySelectorAll('.nav-menu li:has(.sub-menu), nav li:has(.sub-menu), .navbar li:has(.sub-menu), #navMenu li:has(.sub-menu)');
+        items.forEach(function(li) {
+          if (li.querySelector('.mobile-submenu-toggle')) return;
+          var submenu = li.querySelector('.sub-menu');
+          var parentLink = li.querySelector(':scope > a');
+          if (!submenu || !parentLink) return;
+          var toggleBtn = document.createElement('button');
+          toggleBtn.className = 'mobile-submenu-toggle';
+          toggleBtn.setAttribute('aria-label', 'Toggle submenu');
+          toggleBtn.setAttribute('type', 'button');
+          parentLink.insertAdjacentElement('afterend', toggleBtn);
+          toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault(); e.stopPropagation();
+            document.querySelectorAll('.sub-menu.mobile-expanded').forEach(function(menu) {
+              if (menu !== submenu) { menu.classList.remove('mobile-expanded'); var t = menu.parentElement.querySelector('.mobile-submenu-toggle'); if(t) t.classList.remove('expanded'); }
+            });
+            submenu.classList.toggle('mobile-expanded');
+            toggleBtn.classList.toggle('expanded');
+          });
+        });
+      }
+      if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', initMobileSubmenuToggles); }
+      else { initMobileSubmenuToggles(); }
+      var resizeTimer; window.addEventListener('resize', function() { clearTimeout(resizeTimer); resizeTimer = setTimeout(initMobileSubmenuToggles, 250); });
+      // Re-initialize when mobile menu becomes visible (MutationObserver)
+      var observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+          if (mutation.type === 'attributes') {
+            var target = mutation.target;
+            if (target.classList && (target.classList.contains('active') || target.classList.contains('open'))) {
+              setTimeout(initMobileSubmenuToggles, 100);
+            }
+          }
+        });
+      });
+      setTimeout(function() {
+        document.querySelectorAll('.mobile-menu, .nav-menu, #navMenu, nav').forEach(function(menu) {
+          observer.observe(menu, { attributes: true, attributeFilter: ['class', 'style'] });
+        });
+      }, 500);
+    })();
+    </script>
+</body>
+</html>
